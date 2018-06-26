@@ -1,0 +1,70 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Implementaton of the quizaccess_addreview plugin.
+ *
+ * @package    quizaccess
+ * @subpackage addreview
+ * @copyright  2018 Daniel Thies <dethies@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+
+defined('MOODLE_INTERNAL') || die();
+
+require_once($CFG->dirroot . '/mod/quiz/accessrule/accessrulebase.php');
+
+/**
+ * A rule to allow an attempt after close date submitted immediately for review
+ *
+ * @copyright  2018 Daniel Thies <dethies@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class quizaccess_addreview extends quiz_access_rule_base {
+
+    public static function make(quiz $quizobj, $timenow, $canignoretimelimits) {
+        if (empty($quizobj->get_quiz()->timeclose) || $quizobj->get_quiz()->timeclose > $timenow) {
+            return null;
+        }
+
+        // This is a hack because get_superceded_rules has a bug.
+        $quizobj->get_quiz()->originaltimeclose = $quizobj->get_quiz()->timeclose;
+        $quizobj->get_quiz()->timeclose = null;
+        $quizobj->get_quiz()->overduehandling = 'autosubmit';
+        return new self($quizobj, $timenow);
+    }
+
+    public function prevent_access() {
+        return false;
+    }
+
+    public function prevent_new_attempt($numprevattempts, $lastattempt) {
+        if ($numprevattempts != 0) {
+            return get_string('nomoreattempts', 'quizaccess_addreview');
+        }
+        return false;
+    }
+
+    public function description() {
+        return get_string('quizclosed', 'quiz', userdate($this->quiz->originaltimeclose)) .
+        '<p>' . get_string('reviewattempt', 'quizaccess_addreview', userdate($this->quiz->originaltimeclose));
+    }
+
+    public function end_time($attempt) {
+        return $attempt->timestart + 1;
+    }
+}
