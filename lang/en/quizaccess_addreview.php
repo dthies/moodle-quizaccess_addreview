@@ -30,3 +30,4 @@ $string['addreview_help'] = 'Allow students that have not attempted at all one r
 $string['nomoreattempts'] = 'No more attempts';
 $string['pluginname'] = 'Add review attempt';
 $string['reviewattempt'] = 'If you have not attempt it yet, you may be able to attempt it once for review purposes, but you will not be able to submit answers.';
+$string['privacy:metadata'] = 'The Allow review attempt quiz access rule plugin does not store any personal data.';
