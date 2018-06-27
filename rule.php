@@ -37,16 +37,49 @@ require_once($CFG->dirroot . '/mod/quiz/accessrule/accessrulebase.php');
 class quizaccess_addreview extends quiz_access_rule_base {
 
     public static function make(quiz $quizobj, $timenow, $canignoretimelimits) {
-        if (empty($quizobj->get_quiz()->timeclose) || $quizobj->get_quiz()->timeclose > $timenow) {
+        if (empty($quizobj->get_quiz()->addreview) || empty($quizobj->get_quiz()->timeclose) || $quizobj->get_quiz()->timeclose > $timenow) {
             return null;
         }
 
-        // This is a hack because get_superceded_rules has a bug.
-        $quizobj->get_quiz()->originaltimeclose = $quizobj->get_quiz()->timeclose;
-        $quizobj->get_quiz()->timeclose = null;
-        $quizobj->get_quiz()->overduehandling = 'autosubmit';
+        // Force all review attempts to be abandoned so they do not receive a grade.
+        $quizobj->get_quiz()->overduehandling = 'autoabandon';
         return new self($quizobj, $timenow);
     }
+
+    public static function add_settings_form_fields(
+            mod_quiz_mod_form $quizform, MoodleQuickForm $mform) {
+        $mform->addElement('checkbox', 'addreview', get_string('addreview', 'quizaccess_addreview'),
+                get_string('enable'));
+        $mform->disabledIf('addreview', 'timeclose[disabled]');
+        $mform->addHelpButton('addreview', 'addreview', 'quizaccess_addreview');
+    }
+
+    public static function delete_settings($quiz) {
+        global $DB;
+        $DB->delete_records('quizaccess_addreview', array('quizid' => $quiz->id));
+    }
+
+    public static function save_settings($quiz) {
+        global $DB;
+        if (empty($quiz->addreview)) {
+            $DB->delete_records('quizaccess_addreview', array('quizid' => $quiz->id));
+        } else {
+            if (!$DB->record_exists('quizaccess_addreview', array('quizid' => $quiz->id))) {
+                $record = new stdClass();
+                $record->quizid = $quiz->id;
+                $record->addreview = 1;
+                $DB->insert_record('quizaccess_addreview', $record);
+            }
+        }
+    }
+
+    public static function get_settings_sql($quizid) {
+        return array(
+            'COALESCE(addreview, 0) AS addreview',// Using COALESCE to replace NULL with 0.
+            'LEFT JOIN {quizaccess_addreview} qa_ar ON qa_ar.quizid = quiz.id',
+            array());
+    }
+
 
     public function prevent_access() {
         return false;
@@ -60,11 +93,15 @@ class quizaccess_addreview extends quiz_access_rule_base {
     }
 
     public function description() {
-        return get_string('quizclosed', 'quiz', userdate($this->quiz->originaltimeclose)) .
-        '<p>' . get_string('reviewattempt', 'quizaccess_addreview', userdate($this->quiz->originaltimeclose));
+        return get_string('quizclosed', 'quiz', userdate($this->quiz->timeclose)) .
+        '<p>' . get_string('reviewattempt', 'quizaccess_addreview', userdate($this->quiz->timeclose));
     }
 
     public function end_time($attempt) {
-        return $attempt->timestart + 1;
+        return $attempt->timestart;
+    }
+
+    public function get_superceded_rules() {
+        return array('safebrowser', 'openclosedate', 'safebrowser');
     }
 }
