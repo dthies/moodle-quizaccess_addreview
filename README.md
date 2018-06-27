@@ -4,8 +4,13 @@ Allows students that missed a quiz to review the feedback anyway
 
 This plugin changes the behaviour of the quiz after it is closed. Students
 that have not attempted the quiz at all will be able to attempt it once
-however the attempt will be submitted immediately before they have a
-chance to answer.
+however the attempt will end immediately before they have a chance to
+answer. The attempt will appear for review according to the conditions
+set for normal attempts.
+
+The plugin is installed under mod/quiz/accessrules/addreview. To
+enable it for a particular quiz, the box for the rule under 'Additional
+restrictions' should be check.
 
 ## License ##
 
