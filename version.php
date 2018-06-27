@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'quizaccess_addreview';
-$plugin->release = '0.1.0';
-$plugin->version = 2018062500;
+$plugin->release = '1.0 Beta';
+$plugin->version = 2018062700;
 $plugin->requires = 2018051700;
-$plugin->maturity = MATURITY_ALPHA;
+$plugin->maturity = MATURITY_BETA;
