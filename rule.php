@@ -48,8 +48,9 @@ class quizaccess_addreview extends quiz_access_rule_base {
 
     public static function add_settings_form_fields(
             mod_quiz_mod_form $quizform, MoodleQuickForm $mform) {
-        $mform->addElement('checkbox', 'addreview', get_string('addreview', 'quizaccess_addreview'),
-                get_string('enable'));
+        $mform->insertElementBefore(
+                $mform->createElement('selectyesno', 'addreview', get_string('addreview', 'quizaccess_addreview')),
+                'display');
         $mform->disabledIf('addreview', 'timeclose[disabled]');
         $mform->addHelpButton('addreview', 'addreview', 'quizaccess_addreview');
     }
