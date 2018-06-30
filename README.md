@@ -10,12 +10,14 @@ set for normal attempts.
 
 Note, this plugin requires Moodle 2018051700.
 
-The plugin is installed under mod/quiz/accessrule/addreview.  For example
+The plugin is installed under `mod/quiz/accessrule/addreview`.  For example
 
     git clone https://github.com/dthies/moodle-quizaccess_addreview.git mod/quiz/accessrule/addreview
 
 To enable it for a particular quiz, the box for the rule under 'Additional
-restrictions' should be check.
+restrictions' should be check.  That is to say navigate to
+
+    Edit settings -> Extra restrictions on attempts -> Allow review attempt 
 
 
 
