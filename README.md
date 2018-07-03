@@ -8,9 +8,18 @@ however the attempt will end immediately before they have a chance to
 answer. The attempt will appear for review according to the conditions
 set for normal attempts.
 
-The plugin is installed under mod/quiz/accessrules/addreview. To
-enable it for a particular quiz, the box for the rule under 'Additional
-restrictions' should be check.
+Note, this plugin requires Moodle 2018051700.
+
+The plugin is installed under `mod/quiz/accessrule/addreview`.  For example
+
+    git clone https://github.com/dthies/moodle-quizaccess_addreview.git mod/quiz/accessrule/addreview
+
+To enable it for a particular quiz, the box for the rule under 'Additional
+restrictions' should be check.  That is to say navigate to
+
+    Edit settings -> Extra restrictions on attempts -> Allow review attempt 
+
+
 
 ## License ##
 

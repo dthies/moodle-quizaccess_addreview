@@ -37,7 +37,8 @@ require_once($CFG->dirroot . '/mod/quiz/accessrule/accessrulebase.php');
 class quizaccess_addreview extends quiz_access_rule_base {
 
     public static function make(quiz $quizobj, $timenow, $canignoretimelimits) {
-        if (empty($quizobj->get_quiz()->addreview) || empty($quizobj->get_quiz()->timeclose) || $quizobj->get_quiz()->timeclose > $timenow) {
+        if (empty($quizobj->get_quiz()->addreview) || empty($quizobj->get_quiz()->timeclose)
+            || $quizobj->get_quiz()->timeclose > $timenow) {
             return null;
         }
 
@@ -76,7 +77,7 @@ class quizaccess_addreview extends quiz_access_rule_base {
 
     public static function get_settings_sql($quizid) {
         return array(
-            'COALESCE(addreview, 0) AS addreview',// Using COALESCE to replace NULL with 0.
+            'COALESCE(addreview, 0) AS addreview', // Using COALESCE to replace NULL with 0.
             'LEFT JOIN {quizaccess_addreview} qa_ar ON qa_ar.quizid = quiz.id',
             array());
     }
