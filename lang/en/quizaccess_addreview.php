@@ -26,8 +26,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['addreview'] = 'Allow review attempt';
-$string['addreview_help'] = 'Allow students that have not attempted at all one review attempt that will be autosubmitted.';
+$string['addreview_help'] = 'Allow students that have not attempted the quiz at all one attempt after the close time that will end immeditately for review.';
 $string['nomoreattempts'] = 'No more attempts';
 $string['pluginname'] = 'Add review attempt';
-$string['reviewattempt'] = 'If you have not attempt it yet, you may be able to attempt it once for review purposes, but you will not be able to submit answers.';
+$string['reviewattempt'] = 'If you have not attempted it yet, you may be able to attempt it once for review purposes, but you will not be able to submit answers.';
 $string['privacy:metadata'] = 'The Allow review attempt quiz access rule plugin does not store any personal data.';
