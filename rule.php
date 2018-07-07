@@ -82,10 +82,6 @@ class quizaccess_addreview extends quiz_access_rule_base {
     }
 
 
-    public function prevent_access() {
-        return false;
-    }
-
     public function prevent_new_attempt($numprevattempts, $lastattempt) {
         if ($numprevattempts != 0) {
             return get_string('nomoreattempts', 'quizaccess_addreview');
