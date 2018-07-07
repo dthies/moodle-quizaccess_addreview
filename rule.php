@@ -103,6 +103,6 @@ class quizaccess_addreview extends quiz_access_rule_base {
     }
 
     public function get_superceded_rules() {
-        return array('safebrowser', 'openclosedate', 'safebrowser');
+        return array('openclosedate');
     }
 }
